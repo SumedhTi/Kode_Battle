@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Swords, Loader2 } from "lucide-react";
 
-interface FindingOpponentModalProps {
-  onComplete: () => void;
-}
 
-export default function FindingOpponentModal({ onComplete }: FindingOpponentModalProps) {
+
+export default function FindingOpponentModal({ onComplete }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
       <div className="animate-slide-up flex flex-col items-center gap-6 rounded-2xl border border-border bg-card p-10 glow-blue">

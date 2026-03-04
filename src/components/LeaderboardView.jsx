@@ -38,7 +38,7 @@ export default function Leaderboard() {
               <p className="text-sm font-semibold text-foreground">{player.name}</p>
               <p className="font-mono text-xs text-muted-foreground">{player.elo} Elo</p>
               <div
-                className={`${heights[player.rank as 1 | 2 | 3]} w-28 rounded-t-xl border ${badgeColors[player.rank as 1 | 2 | 3]} flex items-center justify-center`}
+                className={`${heights[player.rank]} w-28 rounded-t-xl border ${badgeColors[player.rank]} flex items-center justify-center`}
               >
                 <span className="font-display text-2xl font-bold">#{player.rank}</span>
               </div>

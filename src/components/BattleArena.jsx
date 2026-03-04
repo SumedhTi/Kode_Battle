@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { mockBattleProblem, mockCode } from "@/data/mockData";
+import { mockBattleProblem, mockCode } from "../data/mockData";
 import {
   Play,
   Send,
@@ -10,15 +10,20 @@ import {
   Wifi,
   Clock,
 } from "lucide-react";
+import { Editor } from "@monaco-editor/react";
 
 export default function BattleArena() {
   const [timeLeft, setTimeLeft] = useState(30 * 60);
   const [language, setLanguage] = useState("C++");
-  const [activeTab, setActiveTab] = useState<"testcases" | "console">("testcases");
+  const [activeTab, setActiveTab] = useState("testcases");
   const [opponentStatus, setOpponentStatus] = useState("Opponent is typing...");
+  const [code, setCode] = useState("");
 
   useEffect(() => {
-    const timer = setInterval(() => setTimeLeft((t) => Math.max(0, t - 1)), 1000);
+    const timer = setInterval(
+      () => setTimeLeft((t) => Math.max(0, t - 1)),
+      1000,
+    );
     return () => clearInterval(timer);
   }, []);
 
@@ -46,9 +51,13 @@ export default function BattleArena() {
       {/* Top Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-t-xl border border-border bg-card px-5 py-3">
         <div className="flex items-center gap-4">
-          <div className={`flex items-center gap-2 rounded-lg border px-4 py-2 font-mono text-lg font-bold ${
-            timeLeft < 300 ? "animate-count-down border-destructive/50 bg-destructive/10 text-destructive" : "border-neon-amber/30 bg-neon-amber/10 text-neon-amber"
-          }`}>
+          <div
+            className={`flex items-center gap-2 rounded-lg border px-4 py-2 font-mono text-lg font-bold ${
+              timeLeft < 300
+                ? "animate-count-down border-destructive/50 bg-destructive/10 text-destructive"
+                : "border-neon-amber/30 bg-neon-amber/10 text-neon-amber"
+            }`}
+          >
             <Clock className="h-4 w-4" />
             {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
           </div>
@@ -69,7 +78,9 @@ export default function BattleArena() {
         {/* Left Pane - Problem */}
         <div className="w-full overflow-y-auto border-r border-border bg-card p-6 lg:w-[45%]">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-bold text-foreground">{problem.title}</h2>
+            <h2 className="text-xl font-bold text-foreground">
+              {problem.title}
+            </h2>
             <span className="rounded-full bg-neon-amber/15 px-3 py-0.5 text-xs font-bold text-neon-amber">
               {problem.difficulty}
             </span>
@@ -79,30 +90,43 @@ export default function BattleArena() {
             <p className="whitespace-pre-line">{problem.description}</p>
 
             <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Constraints</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Constraints
+              </h3>
               <ul className="space-y-1">
                 {problem.constraints.map((c, i) => (
-                  <li key={i} className="font-mono text-xs text-muted-foreground">• {c}</li>
+                  <li
+                    key={i}
+                    className="font-mono text-xs text-muted-foreground"
+                  >
+                    • {c}
+                  </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Sample Input</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Sample Input
+              </h3>
               <pre className="rounded-lg border border-border bg-secondary p-3 font-mono text-xs text-accent">
                 {problem.sampleInput}
               </pre>
             </div>
 
             <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Sample Output</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Sample Output
+              </h3>
               <pre className="rounded-lg border border-border bg-secondary p-3 font-mono text-xs text-accent">
                 {problem.sampleOutput}
               </pre>
             </div>
 
             <div>
-              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Explanation</h3>
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                Explanation
+              </h3>
               <p className="text-muted-foreground">{problem.explanation}</p>
             </div>
           </div>
@@ -127,20 +151,22 @@ export default function BattleArena() {
           </div>
 
           {/* Code editor mock */}
-          <div className="flex-1 overflow-auto bg-background p-4">
-            <pre className="font-mono text-sm leading-6">
-              {mockCode.split("\n").map((line, i) => (
-                <div key={i} className="flex">
-                  <span className="mr-4 inline-block w-8 text-right text-muted-foreground/50 select-none">
-                    {i + 1}
-                  </span>
-                  <code className="text-foreground/90">
-                    {colorize(line)}
-                  </code>
-                </div>
-              ))}
-            </pre>
-          </div>
+
+          <Editor
+            height="500px"
+            defaultLanguage="python"
+            theme="vs-dark"
+            value={code}
+            onChange={(value) => setCode(value)}
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              tabSize: 4
+            }}
+          />
+
 
           {/* Test Cases / Console */}
           <div className="border-t border-border">
@@ -148,7 +174,9 @@ export default function BattleArena() {
               <button
                 onClick={() => setActiveTab("testcases")}
                 className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
-                  activeTab === "testcases" ? "border-b-2 border-primary text-primary" : "text-muted-foreground hover:text-foreground"
+                  activeTab === "testcases"
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Test Cases
@@ -156,7 +184,9 @@ export default function BattleArena() {
               <button
                 onClick={() => setActiveTab("console")}
                 className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
-                  activeTab === "console" ? "border-b-2 border-primary text-primary" : "text-muted-foreground hover:text-foreground"
+                  activeTab === "console"
+                    ? "border-b-2 border-primary text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 Console
@@ -181,7 +211,9 @@ export default function BattleArena() {
                         ) : (
                           <XCircle className="h-4 w-4 text-destructive" />
                         )}
-                        <span className="text-foreground">Test Case {tc.id}</span>
+                        <span className="text-foreground">
+                          Test Case {tc.id}
+                        </span>
                       </div>
                       <span className="font-mono text-xs text-muted-foreground">
                         {tc.status === "passed" ? "Passed" : "Failed"}
@@ -218,9 +250,23 @@ export default function BattleArena() {
   );
 }
 
-function colorize(line: string) {
+function colorize(line) {
   // Very simple syntax highlighting for the mock
-  const keywords = ["#include", "using", "namespace", "int", "vector", "for", "if", "return", "auto", "void", "cin", "cout", "endl"];
+  const keywords = [
+    "#include",
+    "using",
+    "namespace",
+    "int",
+    "vector",
+    "for",
+    "if",
+    "return",
+    "auto",
+    "void",
+    "cin",
+    "cout",
+    "endl",
+  ];
   let result = line;
   // Return as-is for simplicity — the mono font + dark bg gives enough "editor" feel
   return <span>{result}</span>;

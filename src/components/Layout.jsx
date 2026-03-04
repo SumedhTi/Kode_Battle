@@ -12,11 +12,11 @@ import {
   LogOut,
 } from "lucide-react";
 import { mockUser } from "@/data/mockData";
+import { useLocation, useNavigate } from "react-router-dom";
 
-type View = "dashboard" | "arena" | "practice" | "leaderboard" | "history" | "shop";
 
-const navItems: { id: View; label: string; icon: React.ElementType }[] = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+const navItems = [
+  { id: "", label: "Dashboard", icon: LayoutDashboard },
   { id: "arena", label: "Battle Arena", icon: Swords },
   { id: "practice", label: "Practice", icon: BookOpen },
   { id: "leaderboard", label: "Leaderboard", icon: Trophy },
@@ -24,14 +24,13 @@ const navItems: { id: View; label: string; icon: React.ElementType }[] = [
   { id: "shop", label: "Kode-Shop", icon: ShoppingBag },
 ];
 
-interface LayoutProps {
-  currentView: View;
-  setCurrentView: (view: View) => void;
-  children: React.ReactNode;
-}
 
-export default function Layout({ currentView, setCurrentView, children }: LayoutProps) {
+
+export default function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const currentView = location.pathname.split("/")[1];
+  const navigate = useNavigate();
 
   return (
     <div className="flex min-h-screen bg-background bg-grid">
@@ -60,7 +59,7 @@ export default function Layout({ currentView, setCurrentView, children }: Layout
             return (
               <button
                 key={item.id}
-                onClick={() => setCurrentView(item.id)}
+                onClick={() => navigate(`/${item.id}`)}
                 className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
                   active
                     ? "bg-primary/15 text-primary glow-blue"

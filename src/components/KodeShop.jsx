@@ -1,22 +1,18 @@
 import { useState } from "react";
 import { mockShopItems, mockUser } from "@/data/mockData";
 import { Coins, CheckCircle2, ShoppingBag } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "react-toastify";
 
 export default function KodeShop() {
-  const { toast } = useToast();
   const [balance, setBalance] = useState(mockUser.battleCoins);
 
-  const handleRedeem = (item: typeof mockShopItems[0]) => {
+  const handleRedeem = (item) => {
     if (balance < item.price) {
-      toast({ title: "Insufficient Coins", description: `You need ${item.price - balance} more Battle Coins.`, variant: "destructive" });
+      toast.error(`Insufficient Coins. You need ${item.price - balance} more Battle Coins.`);
       return;
     }
     setBalance((b) => b - item.price);
-    toast({
-      title: "🎉 Redeemed Successfully!",
-      description: `You got "${item.title}"! Check your email for details.`,
-    });
+    toast.success(`🎉 Redeemed Successfully! You got "${item.title}"! Check your email for details.`);
   };
 
   return (

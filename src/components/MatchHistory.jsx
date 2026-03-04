@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export default function MatchHistory() {
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState(null);
 
   return (
     <div className="animate-slide-up space-y-6">

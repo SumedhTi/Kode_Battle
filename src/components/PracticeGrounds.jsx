@@ -6,13 +6,13 @@ const difficulties = ["All", "Easy", "Medium", "Hard"];
 const topics = ["All", "Arrays", "DP", "Graphs"];
 const statuses = ["All", "Solved", "Unsolved", "Failed"];
 
-const difficultyColor: Record<string, string> = {
+const difficultyColor = {
   Easy: "text-accent bg-accent/10 border-accent/30",
   Medium: "text-neon-amber bg-neon-amber/10 border-neon-amber/30",
   Hard: "text-destructive bg-destructive/10 border-destructive/30",
 };
 
-const statusIcon: Record<string, React.ReactNode> = {
+const statusIcon = {
   solved: <CheckCircle2 className="h-4 w-4 text-accent" />,
   unsolved: <Circle className="h-4 w-4 text-muted-foreground" />,
   failed: <XCircle className="h-4 w-4 text-destructive" />,
@@ -96,11 +96,6 @@ function FilterGroup({
   options,
   value,
   onChange,
-}: {
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (v: string) => void;
 }) {
   return (
     <select
