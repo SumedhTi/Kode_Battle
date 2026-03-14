@@ -1,0 +1,17 @@
+[
+  {
+    "id": "sum_array",
+    "title": "Sum of Array",
+    "description": "Given an array of integers, return the sum of the elements.",
+    "constraints": "1 <= arr.length <= 10^5, -10^9 <= arr[i] <= 10^9",
+    "visibleTestcases": [
+      { "input": "1 2 3", "output": "6" },
+      { "input": "10 -5 2", "output": "7" }
+    ],
+    "hiddenTestcases": [
+      { "input": "100 200 300", "output": "600" },
+      { "input": "-1 -2 -3", "output": "-6" }
+    ],
+    "timeLimit": 2
+  }
+]
